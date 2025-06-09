@@ -1,0 +1,55 @@
+import pandas as pd
+import csv
+
+#Simple stock tracker program
+def main():
+    print("Welcome to the Stock Tracker!")
+    print("Enter your stock details. Type 'done' to finish.\n")
+
+    stock_portfolio = []
+    total_investment = 0
+
+    while True:
+        stock_name = input("Enter stock name (or type 'done' to finish): ").upper()
+        if stock_name == 'DONE':
+            break
+
+        try:
+            price = float(input(f"Enter current price of {stock_name} (₹): "))
+            quantity = int(input(f"Enter number of shares owned of {stock_name}: "))
+        except ValueError:
+            print("Invalid input. Please enter numbers.\n")
+            continue
+
+        investment = price * quantity
+        total_investment += investment
+
+        stock_portfolio.append({
+            "Stock Name": stock_name,
+            "Price (₹)": price,
+            "Quantity": quantity,
+            "Investment (₹)": investment
+        })
+
+        print(f"Added {stock_name} successfully!\n")
+
+    # Display summary
+    print("\nInvestment Summary:\n")
+    for stock in stock_portfolio:
+        print(f"{stock['Stock Name']}: ₹{stock['Price (₹)']} x {stock['Quantity']} = ₹{stock['Investment (₹)']:.2f}")
+
+    print("\nTotal Investment Value: ₹{:.2f}".format(total_investment))
+
+    # Save to CSV
+    filename = "stock_portfolio.csv"
+    with open(filename, mode='w', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=["Stock Name", "Price (₹)", "Quantity", "Investment (₹)"])
+        writer.writeheader()
+        writer.writerows(stock_portfolio)
+
+    print(f"\nStock data saved to '{filename}' successfully!")
+    print("Thank you for using the Stock Tracker!")
+    
+#Run the program
+if __name__ == "__main__":
+    main()
